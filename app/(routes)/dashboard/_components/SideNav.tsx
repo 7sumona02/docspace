@@ -12,10 +12,11 @@ import {
 import { api } from "@/convex/_generated/api"
 import { LogoutLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
 import { useConvex } from "convex/react"
-import { ChevronDown, LayoutGrid, Settings, Users } from "lucide-react"
+import { Archive, ChevronDown, Flag, Github, LayoutGrid, Settings, Users } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Progress } from "@/components/ui/progress"
 
 export interface TEAM {
     createdBy: string,
@@ -37,6 +38,27 @@ const SideNav = () => {
             path: '/',
             icon: Settings
         }
+    ]
+
+    const menuList = [
+        {
+            id: 1,
+            name: 'Getting Started',
+            icon: Flag,
+            path: '/'
+        },
+        {
+            id: 2,
+            name: 'Github',
+            icon: Github,
+            path: '/'
+        },
+        {
+            id: 3,
+            name: 'Archive',
+            icon: Archive,
+            path: '/'
+        },
     ]
 
     const convex = useConvex()
@@ -69,13 +91,13 @@ const SideNav = () => {
     }
     
     return (
-        <div className="w-[20rem] bg-neutral-100 h-screen p-4 space-y-10">
+        <div className="w-[20rem] bg-neutral-100 h-screen p-4 space-y-10 relative">
             <div>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center justify-between gap-2 bg-neutral-200 py-2 px-4 rounded-lg w-full">
                         {activeTeam ? activeTeam.teamName : "Select Team"} <ChevronDown size={18} />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="center" className="w-full">
+                    <DropdownMenuContent align="center" className="w-[18rem]">
                         {teamList.map((team) => (
                             <DropdownMenuLabel 
                                 key={team._id}
@@ -127,6 +149,17 @@ const SideNav = () => {
             </div>
             <div>
                 <Button variant={'outline'} className="w-full flex justify-start"><LayoutGrid />All Files</Button>
+            </div>
+            <div className="absolute bottom-6">
+                {menuList.map((menu) => (
+                    <p className="flex items-center gap-2 hover:underline" key={menu.id}><menu.icon className="w-5" />{menu.name}</p>
+                ))}
+                <Button className="w-[18rem] mt-4">New File</Button>
+                <Progress value={33} className="mt-4" />
+                <div className="mt-4">
+                    <p className="text-sm">1 out of 5 files used</p>
+                    <p>Upgrade for unlimited access.</p>
+                </div>
             </div>
         </div>
     )
