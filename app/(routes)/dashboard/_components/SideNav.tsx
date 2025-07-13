@@ -17,6 +17,17 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Progress } from "@/components/ui/progress"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 
 export interface TEAM {
     createdBy: string,
@@ -95,7 +106,7 @@ const SideNav = () => {
             <div>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center justify-between gap-2 bg-neutral-200 py-2 px-4 rounded-lg w-full">
-                        {activeTeam ? activeTeam.teamName : "Select Team"} <ChevronDown size={18} />
+                        {activeTeam?.teamName} <ChevronDown size={18} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="center" className="w-[18rem]">
                         {teamList.map((team) => (
@@ -150,11 +161,27 @@ const SideNav = () => {
             <div>
                 <Button variant={'outline'} className="w-full flex justify-start"><LayoutGrid />All Files</Button>
             </div>
-            <div className="absolute bottom-6">
+            <div className="absolute bottom-6 space-y-1">
                 {menuList.map((menu) => (
                     <p className="flex items-center gap-2 hover:underline" key={menu.id}><menu.icon className="w-5" />{menu.name}</p>
                 ))}
-                <Button className="w-[18rem] mt-4">New File</Button>
+                <Dialog>
+                    <DialogTrigger><Button className="w-[18rem] mt-4">New File</Button></DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Create New File</DialogTitle>
+                            <Input className="mt-3" placeholder="Create New File" />
+                        </DialogHeader>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button">
+                                Close
+                                </Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+                
                 <Progress value={33} className="mt-4" />
                 <div className="mt-4">
                     <p className="text-sm">1 out of 5 files used</p>
