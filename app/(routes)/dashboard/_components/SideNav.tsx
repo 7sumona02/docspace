@@ -72,6 +72,12 @@ const SideNav = () => {
         },
     ]
 
+    const onFileCreate = (fileName: string) => {
+        console.log(fileName)
+    }
+
+    const [fileInput, setFileInput] = useState('')
+
     const convex = useConvex()
     const [activeTeam, setActiveTeam] = useState<TEAM | null>(null)
     const [teamList, setTeamList] = useState<TEAM[]>([])
@@ -170,12 +176,12 @@ const SideNav = () => {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Create New File</DialogTitle>
-                            <Input className="mt-3" placeholder="Create New File" />
+                            <Input onChange={(e) => setFileInput(e.target.value)} className="mt-3" placeholder="Enter File Name" />
                         </DialogHeader>
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button type="button">
-                                Close
+                                <Button onClick={() => onFileCreate(fileInput)} type="button" disabled={!(fileInput&&fileInput.length>0)}>
+                                Create
                                 </Button>
                             </DialogClose>
                         </DialogFooter>
