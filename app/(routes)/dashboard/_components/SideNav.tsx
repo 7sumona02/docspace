@@ -81,6 +81,7 @@ const SideNav = () => {
     const { user }: any = useKindeBrowserClient()
     const router = useRouter()
     const createFile = useMutation(api.files.createFile)
+    const [totalFiles,setTotalFiles] = useState<Number>()
     
     const onFileCreate = (fileName: string) => {
         console.log(fileName)
@@ -124,6 +125,15 @@ const SideNav = () => {
         if(item.path){
             router.push((item.path))
         }
+    }
+
+    useEffect(() =>{
+        activeTeam&&getFiles()
+    },[activeTeam])
+    const getFiles = async() => {
+        const result = await convex.query(api.files.getFiles,{teamId:activeTeam?._id || ''})
+        console.log(result)
+        setTotalFiles(result?.length)
     }
     
     return (
@@ -207,9 +217,9 @@ const SideNav = () => {
                     </DialogContent>
                 </Dialog>
                 
-                <Progress value={33} className="mt-4" />
+                <Progress value={totalFiles ? (Number(totalFiles)/5)*100 : 0} className="mt-4" />
                 <div className="mt-4">
-                    <p className="text-sm">1 out of 5 files used</p>
+                    <p className="text-sm">{totalFiles?.toString()} out of 5 files used</p>
                     <p>Upgrade for unlimited access.</p>
                 </div>
             </div>
