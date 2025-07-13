@@ -87,7 +87,10 @@ const SideNav = () => {
         createFile({
             fileName: fileName,
             teamId: activeTeam?._id || '',
-            createdBy: user?.email
+            createdBy: user?.email,
+            archive: false,
+            document: '',
+            whiteboard: ''
         }).then(resp => {
             if(resp){
                 toast('File created successfully!')
