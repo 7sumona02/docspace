@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { api } from "@/convex/_generated/api"
 import { LogoutLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
-import { useConvex } from "convex/react"
+import { useConvex, useMutation } from "convex/react"
 import { Archive, ChevronDown, Flag, Github, LayoutGrid, Settings, Users } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -28,6 +28,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
 
 export interface TEAM {
     createdBy: string,
@@ -72,10 +73,6 @@ const SideNav = () => {
         },
     ]
 
-    const onFileCreate = (fileName: string) => {
-        console.log(fileName)
-    }
-
     const [fileInput, setFileInput] = useState('')
 
     const convex = useConvex()
@@ -83,11 +80,30 @@ const SideNav = () => {
     const [teamList, setTeamList] = useState<TEAM[]>([])
     const { user }: any = useKindeBrowserClient()
     const router = useRouter()
+    const createFile = useMutation(api.files.createFile)
     
+    const onFileCreate = (fileName: string) => {
+        console.log(fileName)
+        createFile({
+            fileName: fileName,
+            teamId: activeTeam?._id || '',
+            createdBy: user?.email
+        }).then(resp => {
+            if(resp){
+                toast('File created successfully!')
+            }
+        },(e)=>{
+            toast("Error while creating file")
+        })
+    }
+
     useEffect(() => {
         user && getTeamList()
     }, [user])
     
+    // useEffect(() => {
+    //     activeTeam?setActiveTeamInfo(activeTeam)
+    // },[activeTeam])
     const getTeamList = async () => {
         const result = await convex.query(api.teams.getTeam, { email: user?.email })
         console.log(result)
