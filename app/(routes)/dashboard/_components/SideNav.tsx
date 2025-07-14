@@ -29,6 +29,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { FilesListContext } from "@/app/_context/FilesListContext"
+import Constant from "@/app/_constant/Constant"
+import Pricing from "../Pricing"
 
 export interface TEAM {
     createdBy: string,
@@ -81,7 +83,7 @@ const SideNav = () => {
     const { user }: any = useKindeBrowserClient()
     const router = useRouter()
     const createFile = useMutation(api.files.createFile)
-    const [totalFiles,setTotalFiles] = useState<Number>()
+    const [totalFiles,setTotalFiles] = useState<Number | any>()
     const {fileList_,setFileList_} = useContext(FilesListContext)
     
     const onFileCreate = (fileName: string) => {
@@ -204,24 +206,26 @@ const SideNav = () => {
                 ))}
                 <Dialog>
                     <DialogTrigger><Button className="w-[18rem] mt-4">New File</Button></DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Create New File</DialogTitle>
-                            <Input onChange={(e) => setFileInput(e.target.value)} className="mt-3" placeholder="Enter File Name" />
-                        </DialogHeader>
-                        <DialogFooter>
-                            <DialogClose asChild>
-                                <Button onClick={() => onFileCreate(fileInput)} type="button" disabled={!(fileInput&&fileInput.length>0)}>
-                                Create
-                                </Button>
-                            </DialogClose>
-                        </DialogFooter>
-                    </DialogContent>
+                    {totalFiles < Constant.MAX_FREE_FILE?
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Create New File</DialogTitle>
+                                <Input onChange={(e) => setFileInput(e.target.value)} className="mt-3" placeholder="Enter File Name" />
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button onClick={() => onFileCreate(fileInput)} type="button" disabled={!(fileInput&&fileInput.length>0)}>
+                                    Create
+                                    </Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent> : <Pricing />
+                    }
                 </Dialog>
                 
                 <Progress value={totalFiles ? (Number(totalFiles)/5)*100 : 0} className="mt-4" />
                 <div className="mt-4">
-                    <p className="text-sm">{totalFiles?.toString()} out of 5 files used</p>
+                    <p className="text-sm">{totalFiles?.toString()} out of {Constant.MAX_FREE_FILE} files used</p>
                     <p>Upgrade for unlimited access.</p>
                 </div>
             </div>
