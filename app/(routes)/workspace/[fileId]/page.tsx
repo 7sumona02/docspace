@@ -28,7 +28,7 @@ const page = ({params}:any) => {
                     <Editor onSaveTrigger={triggerSave} fileId={params.fileId} fileData={fileData} />
                 </div>
                 <div className='min-h-screen border-l'>
-                    <Canvas />
+                    <Canvas onSaveTrigger={triggerSave} fileId={params.fileId} fileData={fileData} />
                 </div>
         </div>
     </div>
