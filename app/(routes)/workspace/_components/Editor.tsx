@@ -30,12 +30,17 @@ const rawDocument = {
 ],
     "version" : "2.8.1"
 }
-const Editor = () => {
+const Editor = ({onSaveTrigger}:any) => {
     const ref = useRef<EditorJS | undefined>(undefined)
     const [document,setDocument] = useState(rawDocument)
     useEffect(() => {
       initEditor()
     }, [])
+
+    useEffect(() => {
+        console.log(onSaveTrigger)
+        onSaveTrigger&&onSaveDocument()
+    },[onSaveTrigger])
     
     const initEditor = () => {
         const editor = new EditorJS({
@@ -88,6 +93,16 @@ const Editor = () => {
   }
 });
         ref.current = editor
+    }
+
+    const onSaveDocument = () => {
+        if(ref.current){
+            ref.current.save().then((outputData) => {
+  console.log('Article data: ', outputData)
+}).catch((error) => {
+  console.log('Saving failed: ', error)
+});
+        }
     }
   return (
     <div>

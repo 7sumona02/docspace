@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button'
-import { Share } from 'lucide-react'
+import { Save, Share } from 'lucide-react'
 import React from 'react'
 
-const Header = () => {
+const Header = ({onSave}:any) => {
   return (
     <div className='sticky top-0 border-b border-neutral-200 backdrop-blur-sm bg-white/20 w-screen px-10 py-4 flex items-center justify-between'>
         <div><p className='font-sans font-semibold text-lg'>docspace</p></div>
-        <div><Button><Share />Share</Button></div>
+        <div className='space-x-3'>
+            <Button onClick={() => onSave()}><Save />Save</Button>
+            <Button><Share />Share</Button>
+        </div>
     </div>
   )
 }
