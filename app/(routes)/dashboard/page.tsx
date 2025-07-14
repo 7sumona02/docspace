@@ -26,6 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useRouter } from 'next/navigation'
 
 export interface FILE{
     archive: boolean
@@ -71,6 +72,8 @@ const page = () => {
       fileList_&&setFileList(fileList_)
       console.log(fileList_)
     }, [fileList_])
+
+    const router = useRouter()
     
   return (
     <div className='p-4 w-[65rem]'>
@@ -110,7 +113,7 @@ const page = () => {
                <TableBody>
     {fileList && fileList.map((file: FILE, index: number) => {
         return (
-            <TableRow key={index}>
+            <TableRow key={index} onClick={() => router.push('/workspace/'+file._id)} className='cursor-pointer'>
                 <TableCell className="font-medium">{file.fileName}</TableCell>
                 <TableCell>{moment(file.createdAt).format('DD MMM YYYY')}</TableCell>
                 <TableCell>{moment(file.createdAt).format('DD MMM YYYY')}</TableCell>
