@@ -15,7 +15,7 @@ import { useConvex, useMutation } from "convex/react"
 import { Archive, ChevronDown, Flag, Github, LayoutGrid, Settings, Users } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Progress } from "@/components/ui/progress"
 import {
   Dialog,
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { FilesListContext } from "@/app/_context/FilesListContext"
 
 export interface TEAM {
     createdBy: string,
@@ -81,6 +82,7 @@ const SideNav = () => {
     const router = useRouter()
     const createFile = useMutation(api.files.createFile)
     const [totalFiles,setTotalFiles] = useState<Number>()
+    const {fileList_,setFileList_} = useContext(FilesListContext)
     
     const onFileCreate = (fileName: string) => {
         console.log(fileName)
@@ -132,6 +134,7 @@ const SideNav = () => {
     const getFiles = async() => {
         const result = await convex.query(api.files.getFiles,{teamId:activeTeam?._id || ''})
         console.log(result)
+        setFileList_(result)
         setTotalFiles(result?.length)
     }
     

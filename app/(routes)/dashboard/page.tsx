@@ -5,18 +5,38 @@ import { Input } from '@/components/ui/input'
 import { api } from '@/convex/_generated/api'
 import { LogoutLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { useConvex, useMutation, useQuery } from 'convex/react'
-import { Search, Send } from 'lucide-react'
+import { Archive, MoreHorizontal, Search, Send } from 'lucide-react'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { FilesListContext } from '@/app/_context/FilesListContext'
+import moment from 'moment'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export interface FILE{
+    archive: boolean
+    createdAt: string
+    document: string
+    fileName: string
+    teamId: string
+    whiteboard: string
+    _id: string
+    _creationTime: number
+}
 
 const page = () => {
 
@@ -43,6 +63,15 @@ const page = () => {
                 })
             }
     }
+
+    const {fileList_, setFileList_} = useContext(FilesListContext)
+    const [fileList, setFileList] = useState<any>()
+
+    useEffect(() => {
+      fileList_&&setFileList(fileList_)
+      console.log(fileList_)
+    }, [fileList_])
+    
   return (
     <div className='p-4 w-[65rem]'>
         {/* <Button
@@ -78,14 +107,28 @@ const page = () => {
                     <TableHead className="text-right">Author</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    <TableRow>
-                    <TableCell className="font-medium">INV001</TableCell>
-                    <TableCell>Paid</TableCell>
-                    <TableCell>Credit Card</TableCell>
-                    <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                </TableBody>
+               <TableBody>
+    {fileList && fileList.map((file: FILE, index: number) => {
+        return (
+            <TableRow key={index}>
+                <TableCell className="font-medium">{file.fileName}</TableCell>
+                <TableCell>{moment(file.createdAt).format('DD MMM YYYY')}</TableCell>
+                <TableCell>{moment(file.createdAt).format('DD MMM YYYY')}</TableCell>
+                <TableCell className="flex justify-end">
+                    <Image src={user?.picture} alt='profile' height={34} width={34} className='rounded-full'  />
+                </TableCell>
+                <TableCell className="pl-10">
+                    <DropdownMenu>
+                    <DropdownMenuTrigger><MoreHorizontal /></DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem><Archive />Archive</DropdownMenuItem>
+                    </DropdownMenuContent>
+                    </DropdownMenu>
+                </TableCell>
+            </TableRow>
+        );
+    })}
+</TableBody>
             </Table>
         </div>
     </div>
