@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/ui/hero.jsx", "app/(routes)/dashboard/_components/SideNav.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/ui/hero.jsx", "app/(routes)/dashboard/_components/SideNav.jsx", "app/(routes)/workspace/_components/Header.jsx", "app/(routes)/workspace/_components/Editor.jsx", "app/(routes)/workspace/_components/Canvas.jsx", "app/(routes)/workspace/[fileId]/page.jsx", "app/(routes)/dashboard/page.jsx", "app/(routes)/dashboard/layout.jsx", "app/(routes)/teams/create/page.jsx"],
   "exclude": ["node_modules"]
 }

@@ -9,17 +9,17 @@ import { FilesListContext } from '@/app/_context/FilesListContext';
 
 function DashboardLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}) {
 
     const convex = useConvex()
-    const {user}:any = useKindeBrowserClient()
+    const {user} = useKindeBrowserClient()
     const router = useRouter()
 
     useEffect(() => {
-        user&&checkTeam()
-    },[user])
+    if (user) {
+        checkTeam();
+    }
+}, [user]);
 
     const checkTeam = async() => {
         const result = await convex.query(api.teams.getTeam, {email: user?.email})

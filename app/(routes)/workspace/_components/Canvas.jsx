@@ -7,12 +7,14 @@ import { FILE } from "../../dashboard/page";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
-const Canvas = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any,fileData:FILE}) => {
-    const [whiteBoardData, setWhiteBoardData] = useState<any>()
+const Canvas = ({onSaveTrigger,fileId,fileData}) => {
+    const [whiteBoardData, setWhiteBoardData] = useState()
     const updateWhiteBoard = useMutation(api.files.updateWhiteboard)
     useEffect(() => {
-        onSaveTrigger&&saveWhiteboard()
-    },[onSaveTrigger])
+    if (onSaveTrigger) {
+        saveWhiteboard();
+    }
+}, [onSaveTrigger]);
     const saveWhiteboard = () => {
         updateWhiteBoard({
             _id: fileId,
@@ -24,7 +26,7 @@ const Canvas = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any,fi
         {fileData &&
             <Excalidraw initialData={{
                 elements: fileData?.whiteboard&&JSON.parse(fileData?.whiteboard)
-            }} onChange={(excalidrawElements, appState, files)=>setWhiteBoardData(excalidrawElements)}>
+            }} onChange={(excalidrawElements)=>setWhiteBoardData(excalidrawElements)}>
                 <WelcomeScreen />
             </Excalidraw>
         }

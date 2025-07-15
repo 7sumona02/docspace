@@ -32,11 +32,11 @@ import { FilesListContext } from "@/app/_context/FilesListContext"
 import Constant from "@/app/_constant/Constant"
 import Pricing from "../Pricing"
 
-export interface TEAM {
-    createdBy: string,
-    teamName: string,
-    _id: string
-}
+// export interface TEAM {
+//     createdBy: string,
+//     teamName: string,
+//     _id: string
+// }
 
 const SideNav = () => {
     const menu = [
@@ -78,15 +78,15 @@ const SideNav = () => {
     const [fileInput, setFileInput] = useState('')
 
     const convex = useConvex()
-    const [activeTeam, setActiveTeam] = useState<TEAM | null>(null)
-    const [teamList, setTeamList] = useState<TEAM[]>([])
-    const { user }: any = useKindeBrowserClient()
+    const [activeTeam, setActiveTeam] = useState(null)
+    const [teamList, setTeamList] = useState([])
+    const { user } = useKindeBrowserClient()
     const router = useRouter()
     const createFile = useMutation(api.files.createFile)
-    const [totalFiles,setTotalFiles] = useState<Number | any>()
+    const [totalFiles,setTotalFiles] = useState()
     const {fileList_,setFileList_} = useContext(FilesListContext)
     
-    const onFileCreate = (fileName: string) => {
+    const onFileCreate = (fileName) => {
         console.log(fileName)
         createFile({
             fileName: fileName,
@@ -120,19 +120,21 @@ const SideNav = () => {
         }
     }
 
-    const handleTeamSelect = (team: TEAM) => {
+    const handleTeamSelect = (team) => {
         setActiveTeam(team)
     }
 
-    const onMenuCLick = (item:any) => {
+    const onMenuCLick = (item) => {
         if(item.path){
             router.push((item.path))
         }
     }
 
-    useEffect(() =>{
-        activeTeam&&getFiles()
-    },[activeTeam])
+    useEffect(() => {
+    if (activeTeam) {
+        getFiles();
+    }
+}, [activeTeam]);
     const getFiles = async() => {
         const result = await convex.query(api.files.getFiles,{teamId:activeTeam?._id || ''})
         console.log(result)

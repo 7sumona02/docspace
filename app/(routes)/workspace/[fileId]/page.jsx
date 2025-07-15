@@ -1,20 +1,23 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import Header from '../_components/Header'
 import Editor from '../_components/Editor'
 import { useConvex } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { FILE } from '../../dashboard/page'
 import Canvas from '../_components/Canvas'
 
-const page = ({params}:any) => {
+const Page = ({params}) => {
     const convex = useConvex()
     const [triggerSave, setTriggerSave] = useState(false)
-    const [fileData, setFileData] = useState<FILE|any>()
+    const [fileData, setFileData] = useState()
 
-    useEffect(() => {
-        params.fileId&&getFileData()
-    },[])
+    const { fileId } = use(params);
+
+  useEffect(() => {
+    if (fileId) {
+      getFileData(fileId);
+    }
+  }, [fileId]);
     const getFileData = async() => {
         const result = await convex.query(api.files.getFileById,{_id:params.fileId})
         // console.log(result)
@@ -35,4 +38,4 @@ const page = ({params}:any) => {
   )
 }
 
-export default page
+export default Page

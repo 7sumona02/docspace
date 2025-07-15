@@ -12,7 +12,7 @@ import { toast } from "sonner"
 const Page = () => {
     const [teamName, setTeamName] = useState('')
     const createTeam = useMutation(api.teams.createTeam)
-    const {user}:any = useKindeBrowserClient()
+    const {user} = useKindeBrowserClient()
     const router = useRouter()
 
     const createNewTeam= () => {

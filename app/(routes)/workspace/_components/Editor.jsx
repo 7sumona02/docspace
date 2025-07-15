@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import EditorjsList from '@editorjs/list';
-// @ts-ignore
+// @ts-expect-error
 import Checklist from '@editorjs/checklist'
-// @ts-ignore
+// @ts-expect-error
 import LinkTool from '@editorjs/link';
 import ImageTool from '@editorjs/image';
 import Paragraph from '@editorjs/paragraph';
@@ -34,18 +34,22 @@ const rawDocument = {
 ],
     "version" : "2.8.1"
 }
-const Editor = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any, fileData: FILE}) => {
-    const ref = useRef<EditorJS | undefined>(undefined)
+const Editor = ({onSaveTrigger,fileId,fileData}) => {
+    const ref = useRef(undefined)
     const updateDocument = useMutation(api.files.updateDocument)
-    const [document,setDocument] = useState(rawDocument)
-    useEffect(() => {
-      fileData&& initEditor()
-    }, [fileData ])
+    // const [document,setDocument] = useState(rawDocument)
+   useEffect(() => {
+    if (fileData) {
+        initEditor();
+    }
+}, [fileData]);
 
     useEffect(() => {
-        console.log(onSaveTrigger)
-        onSaveTrigger&&onSaveDocument()
-    },[onSaveTrigger])
+    console.log(onSaveTrigger);
+    if (onSaveTrigger) {
+        onSaveDocument();
+    }
+}, [onSaveTrigger]);
     
     const initEditor = () => {
         const editor = new EditorJS({
@@ -56,7 +60,7 @@ const Editor = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any, f
   data: fileData?.document?JSON.parse(fileData.document):rawDocument,
   tools: {
     header: {
-      // @ts-ignore
+      // @ts-expect-error
       class: Header,
       shortcut: 'CMD+SHIFT+H',
       config: {
@@ -64,7 +68,7 @@ const Editor = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any, f
       }
     },
     List: {
-        // @ts-ignore
+        // @ts-expect-error
       class: EditorjsList,
       inlineToolbar: true,
       config: {
@@ -91,7 +95,7 @@ const Editor = ({onSaveTrigger,fileId,fileData}:{onSaveTrigger:any,fileId:any, f
       }
     },
     paragraph: {
-        // @ts-ignore
+        // @ts-expect-error
       class: Paragraph,
       inlineToolbar: true,
     },

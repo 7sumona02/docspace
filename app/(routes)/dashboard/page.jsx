@@ -28,21 +28,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from 'next/navigation'
 
-export interface FILE{
-    archive: boolean
-    createdAt: string
-    document: string
-    fileName: string
-    teamId: string
-    whiteboard: string
-    _id: string
-    _creationTime: number
-}
+// export interface FILE{
+//     archive: boolean
+//     createdAt: string
+//     document: string
+//     fileName: string
+//     teamId: string
+//     whiteboard: string
+//     _id: string
+//     _creationTime: number
+// }
 
-const page = () => {
+const Page = () => {
 
     const convex = useConvex()
-    const {user}:any =useKindeBrowserClient()
+    const {user} =useKindeBrowserClient()
     const getUser = useQuery(api.user.getUser, {email: user?.email})
 
     const createUser = useMutation(api.user.createUser)
@@ -66,7 +66,7 @@ const page = () => {
     }
 
     const {fileList_, setFileList_} = useContext(FilesListContext)
-    const [fileList, setFileList] = useState<any>()
+    const [fileList, setFileList] = useState()
 
     useEffect(() => {
       fileList_&&setFileList(fileList_)
@@ -111,7 +111,7 @@ const page = () => {
                     </TableRow>
                 </TableHeader>
                <TableBody>
-    {fileList && fileList.map((file: FILE, index: number) => {
+    {fileList && fileList.map((file, index) => {
         return (
             <TableRow key={index} onClick={() => router.push('/workspace/'+file._id)} className='cursor-pointer'>
                 <TableCell className="font-medium">{file.fileName}</TableCell>
@@ -138,4 +138,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
